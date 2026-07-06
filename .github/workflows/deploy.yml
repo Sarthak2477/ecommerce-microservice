@@ -25,7 +25,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api-gateway, product_service, order-service, inventory-service, user-service, notification-service, payment_service]
+        include:
+          - service: api-gateway
+            image: ecomm-api-gateway
+          - service: user-service
+            image: ecomm-user-service
+          - service: product_service
+            image: ecomm-product-service
+          - service: order-service
+            image: ecomm-order-service
+          - service: inventory-service
+            image: ecomm-inventory-service
+          - service: payment_service
+            image: ecomm-payment-service
+          - service: notification-service
+            image: ecomm-notification-service
     
     steps:
       - name: Checkout Code
@@ -59,8 +73,8 @@ jobs:
           push: true
           # Tags the image with the git commit SHA as well as 'latest'
           tags: |
-            ${{ env.DOCKER_USER }}/ecomm-${{ matrix.service }}:latest
-            ${{ env.DOCKER_USER }}/ecomm-${{ matrix.service }}:${{ github.sha }}
+            ${{ env.DOCKER_USER }}/${{ matrix.image }}:latest
+            ${{ env.DOCKER_USER }}/${{ matrix.image }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
