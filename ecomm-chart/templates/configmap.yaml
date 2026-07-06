@@ -22,5 +22,8 @@ data:
   SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_PRODUCT_SERVICE_URL: "http://product-service:{{ .Values.services.productService.port }}"
   SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_INVENTORY_SERVICE_URL: "http://inventory-service:{{ .Values.services.inventoryService.port }}"
   
+  # Disable Spring Cloud Config check since we package configuration locally
+  SPRING_CLOUD_CONFIG_ENABLED: "false"
+  
   # JVM Options
   JAVA_TOOL_OPTIONS: "{{ .Values.microservices.javaOpts }}"
