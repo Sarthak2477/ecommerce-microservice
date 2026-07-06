@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: postgres
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -46,6 +48,8 @@ kind: Deployment
 metadata:
   name: redis
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -81,6 +85,8 @@ kind: Deployment
 metadata:
   name: kafka
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
