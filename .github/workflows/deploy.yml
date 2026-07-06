@@ -52,6 +52,21 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Inject Local Config Files
+        run: |
+          SERVICE_NAME="${{ matrix.service }}"
+          # Replace underscore with hyphen to match the config filename (e.g. product_service -> product-service)
+          CONFIG_NAME="${SERVICE_NAME//_/-}"
+          CONFIG_FILE="config/${CONFIG_NAME}.properties"
+          
+          if [ -f "$CONFIG_FILE" ]; then
+            echo "Injecting $CONFIG_FILE into ${SERVICE_NAME}/src/main/resources/application.properties"
+            mkdir -p "${SERVICE_NAME}/src/main/resources"
+            cp "$CONFIG_FILE" "${SERVICE_NAME}/src/main/resources/application.properties"
+          else
+            echo "No config file found at $CONFIG_FILE"
+          fi
+
       - name: Compile and Package Jars
         run: |
           cd ${{ matrix.service }}
