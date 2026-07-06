@@ -25,5 +25,8 @@ data:
   # Disable Spring Cloud Config check since we package configuration locally
   SPRING_CLOUD_CONFIG_ENABLED: "false"
   
+  # Disable Eureka Discovery client since we use native K8s DNS routing
+  EUREKA_CLIENT_ENABLED: "false"
+  
   # JVM Options
   JAVA_TOOL_OPTIONS: "{{ .Values.microservices.javaOpts }}"

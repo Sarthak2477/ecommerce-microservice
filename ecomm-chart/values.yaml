@@ -15,36 +15,18 @@ postgres:
   dbName: "postgres"
   username: "postgres"
   password: "secret"
-  resources:
-    limits:
-      memory: "128Mi"
-      cpu: "300m"
-    requests:
-      memory: "64Mi"
-      cpu: "50m"
+  resources: {}
 
 # Redis Configuration
 redis:
   image: "redis:7-alpine"
-  resources:
-    limits:
-      memory: "64Mi"
-      cpu: "100m"
-    requests:
-      memory: "32Mi"
-      cpu: "25m"
+  resources: {}
 
 # Kafka Configuration
 kafka:
   image: "apache/kafka:3.7.0"
   clusterId: "MkU3OEVBNTcwNTJENDM2Qk"
-  resources:
-    limits:
-      memory: "256Mi"
-      cpu: "300m"
-    requests:
-      memory: "128Mi"
-      cpu: "50m"
+  resources: {}
 
 # JWT configuration
 security:
@@ -52,13 +34,7 @@ security:
 
 # Microservices default resources
 microservices:
-  resources:
-    limits:
-      memory: "256Mi"
-      cpu: "300m"
-    requests:
-      memory: "128Mi"
-      cpu: "50m"
+  resources: {}
   # Java Tool Options to restrict heap space
   javaOpts: "-Xms32m -Xmx128m -XX:+UseG1GC"
 
@@ -84,14 +60,8 @@ monitoring:
   enabled: false
   prometheus:
     image: "prom/prometheus:v2.45.0"
-    resources:
-      limits:
-        memory: "256Mi"
-        cpu: "500m"
+    resources: {}
   grafana:
     image: "grafana/grafana-oss:10.0.0"
     adminPassword: "admin"
-    resources:
-      limits:
-        memory: "256Mi"
-        cpu: "500m"
+    resources: {}
