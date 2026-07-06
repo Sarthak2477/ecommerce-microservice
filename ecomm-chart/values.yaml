@@ -17,22 +17,22 @@ postgres:
   password: "secret"
   resources:
     limits:
-      memory: "256Mi"
-      cpu: "500m"
-    requests:
       memory: "128Mi"
-      cpu: "100m"
+      cpu: "300m"
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
 
 # Redis Configuration
 redis:
   image: "redis:7-alpine"
   resources:
     limits:
-      memory: "128Mi"
-      cpu: "200m"
-    requests:
       memory: "64Mi"
-      cpu: "50m"
+      cpu: "100m"
+    requests:
+      memory: "32Mi"
+      cpu: "25m"
 
 # Kafka Configuration
 kafka:
@@ -40,11 +40,11 @@ kafka:
   clusterId: "MkU3OEVBNTcwNTJENDM2Qk"
   resources:
     limits:
-      memory: "384Mi"
-      cpu: "500m"
-    requests:
       memory: "256Mi"
-      cpu: "100m"
+      cpu: "300m"
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
 
 # JWT configuration
 security:
@@ -54,13 +54,13 @@ security:
 microservices:
   resources:
     limits:
-      memory: "384Mi"
-      cpu: "500m"
-    requests:
       memory: "256Mi"
-      cpu: "100m"
+      cpu: "300m"
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
   # Java Tool Options to restrict heap space
-  javaOpts: "-Xms64m -Xmx256m -XX:+UseG1GC"
+  javaOpts: "-Xms32m -Xmx128m -XX:+UseG1GC"
 
 # Specific service ports
 services:
@@ -81,7 +81,7 @@ services:
 
 # Monitoring Configuration
 monitoring:
-  enabled: true
+  enabled: false
   prometheus:
     image: "prom/prometheus:v2.45.0"
     resources:
