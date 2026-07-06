@@ -1,0 +1,271 @@
+# 1. API Gateway Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-api-gateway:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.apiGateway.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  ports:
+  - port: {{ .Values.services.apiGateway.port }}
+    targetPort: {{ .Values.services.apiGateway.port }}
+  selector:
+    app: api-gateway
+
+---
+# 2. User Service Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-user-service:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.userService.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  ports:
+  - port: {{ .Values.services.userService.port }}
+    targetPort: {{ .Values.services.userService.port }}
+  selector:
+    app: user-service
+
+---
+# 3. Product Service Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+      - name: product-service
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-product-service:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.productService.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  ports:
+  - port: {{ .Values.services.productService.port }}
+    targetPort: {{ .Values.services.productService.port }}
+  selector:
+    app: product-service
+
+---
+# 4. Order Service Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+      - name: order-service
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-order-service:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.orderService.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  ports:
+  - port: {{ .Values.services.orderService.port }}
+    targetPort: {{ .Values.services.orderService.port }}
+  selector:
+    app: order-service
+
+---
+# 5. Inventory Service Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-service
+  template:
+    metadata:
+      labels:
+        app: inventory-service
+    spec:
+      containers:
+      - name: inventory-service
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-inventory-service:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.inventoryService.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-service
+spec:
+  ports:
+  - port: {{ .Values.services.inventoryService.port }}
+    targetPort: {{ .Values.services.inventoryService.port }}
+  selector:
+    app: inventory-service
+
+---
+# 6. Payment Service Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+      - name: payment-service
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-payment-service:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.paymentService.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+spec:
+  ports:
+  - port: {{ .Values.services.paymentService.port }}
+    targetPort: {{ .Values.services.paymentService.port }}
+  selector:
+    app: payment-service
+
+---
+# 7. Notification Service Deployment & Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+      - name: notification-service
+        image: "{{ .Values.global.image.repositoryPrefix }}/ecomm-notification-service:{{ .Values.global.image.tag }}"
+        imagePullPolicy: "{{ .Values.global.image.pullPolicy }}"
+        ports:
+        - containerPort: {{ .Values.services.notificationService.port }}
+        envFrom:
+        - configMapRef:
+            name: ecomm-config
+        resources:
+          {{- toYaml .Values.microservices.resources | nindent 10 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+spec:
+  ports:
+  - port: {{ .Values.services.notificationService.port }}
+    targetPort: {{ .Values.services.notificationService.port }}
+  selector:
+    app: notification-service

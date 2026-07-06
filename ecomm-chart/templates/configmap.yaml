@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecomm-config
+data:
+  # Database configuration
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres-service:5432/{{ .Values.postgres.dbName }}"
+  SPRING_DATASOURCE_USERNAME: "{{ .Values.postgres.username }}"
+  SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgres.password }}"
+  
+  # Redis configuration
+  SPRING_DATA_REDIS_HOST: "redis-service"
+  SPRING_DATA_REDIS_PORT: "6379"
+  
+  # Kafka Configuration
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  
+  # Security configuration
+  JWT_SECRET: "{{ .Values.security.jwtSecret }}"
+  
+  # Feign Clients config (override Eureka Dynamic Routing)
+  SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_PRODUCT_SERVICE_URL: "http://product-service:{{ .Values.services.productService.port }}"
+  SPRING_CLOUD_OPENFEIGN_CLIENT_CONFIG_INVENTORY_SERVICE_URL: "http://inventory-service:{{ .Values.services.inventoryService.port }}"
+  
+  # JVM Options
+  JAVA_TOOL_OPTIONS: "{{ .Values.microservices.javaOpts }}"

@@ -1,0 +1,97 @@
+# Default values for ecomm chart.
+# This is a YAML-formatted file.
+
+# Global Docker Repository Configuration
+# Replace 'yourdockerhubuser' with your actual Docker Hub username!
+global:
+  image:
+    repositoryPrefix: "yourdockerhubuser"
+    tag: "latest"
+    pullPolicy: "Always"
+
+# Database Configuration
+postgres:
+  image: "postgres:16-alpine"
+  dbName: "postgres"
+  username: "postgres"
+  password: "secret"
+  resources:
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+
+# Redis Configuration
+redis:
+  image: "redis:7-alpine"
+  resources:
+    limits:
+      memory: "128Mi"
+      cpu: "200m"
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+
+# Kafka Configuration
+kafka:
+  image: "apache/kafka:3.7.0"
+  clusterId: "MkU3OEVBNTcwNTJENDM2Qk"
+  resources:
+    limits:
+      memory: "384Mi"
+      cpu: "500m"
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+
+# JWT configuration
+security:
+  jwtSecret: "qHaRsJX5t4bndubo4eH5LZbVIjzn5lpQRHqvrEZuLhBdY4L5"
+
+# Microservices default resources
+microservices:
+  resources:
+    limits:
+      memory: "384Mi"
+      cpu: "500m"
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+  # Java Tool Options to restrict heap space
+  javaOpts: "-Xms64m -Xmx256m -XX:+UseG1GC"
+
+# Specific service ports
+services:
+  apiGateway:
+    port: 8080
+  productService:
+    port: 8081
+  orderService:
+    port: 8082
+  inventoryService:
+    port: 8083
+  userService:
+    port: 8084
+  notificationService:
+    port: 8085
+  paymentService:
+    port: 8086
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  prometheus:
+    image: "prom/prometheus:v2.45.0"
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "500m"
+  grafana:
+    image: "grafana/grafana-oss:10.0.0"
+    adminPassword: "admin"
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "500m"

@@ -1,0 +1,156 @@
+services:
+
+  discovery-server:
+    build: ./discovery-server
+    image: ecomm-discovery-server:v1
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx192m -XX:+UseG1GC
+
+  config-server:
+    build: ./config-server
+    image: ecomm-config-server:v1
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    volumes:
+      - ./config:/config
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=file:///config
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx192m -XX:+UseG1GC
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/product-service/default"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  api-gateway:
+    build: ./api-gateway
+    image: ecomm-api-gateway:v1
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx192m -XX:+UseG1GC
+
+  product-service:
+    build: ./product_service
+    image: ecomm-product-service:v1
+    container_name: product-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m -XX:+UseG1GC
+
+  order-service:
+    build: ./order-service
+    image: ecomm-order-service:v1
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m -XX:+UseG1GC
+
+  inventory-service:
+    build: ./inventory-service
+    image: ecomm-inventory-service:v1
+    container_name: inventory-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m -XX:+UseG1GC
+
+  user-service:
+    build: ./user-service
+    image: ecomm-user-service:v1
+    container_name: user-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m -XX:+UseG1GC
+
+  notification-service:
+    build: ./notification-service
+    image: ecomm-notification-service:v1
+    container_name: notification-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx192m -XX:+UseG1GC
+
+  payment-service:
+    build: ./payment_service
+    image: ecomm-payment-service:v1
+    container_name: payment-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m -XX:+UseG1GC
