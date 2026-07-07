@@ -2,15 +2,18 @@ name: CI/CD Multi-Cluster Deployer
 
 on:
   push:
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
     branches:
       - main
   # Allows you to trigger the deployment manually and select the cluster
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Target Environment'
+        description: "Target Environment"
         required: true
-        default: 'dev'
+        default: "dev"
         type: choice
         options:
           - dev
@@ -40,7 +43,7 @@ jobs:
             image: ecomm-payment-service
           - service: notification-service
             image: ecomm-notification-service
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -48,9 +51,9 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
+          java-version: "21"
+          distribution: "temurin"
+          cache: "maven"
 
       - name: Inject Local Config Files
         run: |
@@ -58,7 +61,7 @@ jobs:
           # Replace underscore with hyphen to match the config filename (e.g. product_service -> product-service)
           CONFIG_NAME="${SERVICE_NAME//_/-}"
           CONFIG_FILE="config/${CONFIG_NAME}.properties"
-          
+
           if [ -f "$CONFIG_FILE" ]; then
             echo "Injecting $CONFIG_FILE into ${SERVICE_NAME}/src/main/resources/application.properties"
             mkdir -p "${SERVICE_NAME}/src/main/resources"
@@ -132,7 +135,7 @@ jobs:
         run: |
           # Checks if values file exists for selected env, uses default values.yaml if not.
           VALUES_FILE="ecomm-chart/values-${{ env.TARGET_ENV }}.yaml"
-          
+
           if [ -f "$VALUES_FILE" ]; then
             echo "Deploying with environment values: $VALUES_FILE"
             helm upgrade --install ecomm ./ecomm-chart \
